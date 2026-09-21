@@ -6,24 +6,37 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
-  if (argc < 5) {
-    std::cerr << "usage: dotpack dot link <src> <dst>\n";
+  if (argc < 2) {
+    std::cerr << "usage: dotpack <command>\n";
+    std::cerr << "commands: scan, link, update, push\n";
     return 2;
   }
 
   std::string command = argv[1];
-  std::string subcommand = argv[2];
 
-  if (command != "dot" || subcommand != "link") {
-    std::cerr << "unknown command\n";
+  if (command == "scan") {
+    std::cout << "TODO: scan\n";
+    return 0;
+  } else if (command == "link") {
+    if (argc != 4) {
+      std::cerr << "usage: dotpack link <src> <dst>\n";
+      return 2;
+    }
+    fs::path src = argv[2];
+    fs::path dst = argv[3];
+
+    if (!link_one(src, dst))
+      return 1;
+
+    return 0;
+  } else if (command == "update") {
+    std::cout << "TODO: update\n";
+    return 0;
+  } else if (command == "push") {
+    std::cout << "TODO: push\n";
+    return 0;
+  } else {
+    std::cerr << "unknown command: " << command << "\n";
     return 3;
   }
-
-  fs::path src = argv[3];
-  fs::path dst = argv[4];
-
-  if (!link_one(src, dst))
-    return 1;
-
-  return 0;
 }
