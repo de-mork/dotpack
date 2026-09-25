@@ -17,6 +17,7 @@
 Файлы:
 - src/main.cpp       - Общий сбор всех комманд
 - src/config.cpp/.h  - Париснг конфигов
+- src/utils.cpp/.h   - Полезные функции
 - src/commands/      - содержит в себе всю логику команд
     scan.cpp/.h
     link.cpp/.h
@@ -36,9 +37,20 @@
 2 - неверные аргументы
 3 - команда не найдена
 
-## Следующий шаг
-- развернуть ~ в read_config (или отдельная функция)
-- link читает конфиг, цикл по entries
-- убрать argc проверку
-- тест на zshrc + gitconfig
-- коммит
+## Сделано
+- [x] config.cpp — парсер (read_config, Entry)
+- [x] utils.cpp - файл под полезные мини-функции (trim, expand_tilde) 
+- [x] link читает конфиг и создаёт симлинки
+- [x] dotfiles репо с 3 конфигами (zshrc, gitconfig, kitty)
+
+## Следующее
+- [ ] push — git add/commit/push в ~/dotfiles
+- [ ] update — сравнение системы и репо
+- [ ] scan — поиск конфигов
+- [ ] collect — копирование + запись в конфиг
+- [ ] write_config
+- [ ] target_include_directories в CMake (убрать ../config.h)
+- [ ] README
+- [ ] лицензия MIT
+- [ ] публичный dotpack
+- [ ] AUR-пакет
