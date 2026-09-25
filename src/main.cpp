@@ -1,7 +1,9 @@
 #include "commands/link.h"
+#include "config.h"
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -18,17 +20,23 @@ int main(int argc, char *argv[]) {
         std::cout << "TODO: scan\n";
         return 0;
     } else if (command == "link") {
-        if (argc != 4) {
-            std::cerr << "usage: dotpack link <src> <dst>\n";
-            return 2;
+        const char *home = std::getenv("HOME");
+
+        fs::path config_path =
+            fs::path(home) / ".config" / "dotpack" / "config";
+
+        auto entries = read_config(config_path);
+
+        int failures = 0;
+        for (const auto &entry : entries) {
+            fs::path src = fs::path(home) / "dotfiles" / entry.repo_name;
+            fs::path dst = entry.system_path;
+
+            if (!link_one(src, dst))
+                failures++;
         }
-        fs::path src = argv[2];
-        fs::path dst = argv[3];
 
-        if (!link_one(src, dst))
-            return 1;
-
-        return 0;
+        return failures == 0 ? 0 : 1;
     } else if (command == "update") {
         std::cout << "TODO: update\n";
         return 0;

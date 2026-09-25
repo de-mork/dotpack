@@ -7,4 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(dotpack 
   src/main.cpp
   src/commands/link.cpp
+  src/config.cpp
 )
