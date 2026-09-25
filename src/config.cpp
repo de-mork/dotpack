@@ -1,6 +1,5 @@
 #include "config.h"
 #include "utils.h"
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
