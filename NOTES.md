@@ -44,13 +44,11 @@
 - [x] dotfiles репо с 3 конфигами (zshrc, gitconfig, kitty)
 
 ## Следующее
-- [ ] push — git add/commit/push в ~/dotfiles
-- [ ] update — сравнение системы и репо
-- [ ] scan — поиск конфигов
-- [ ] collect — копирование + запись в конфиг
-- [ ] write_config
-- [ ] target_include_directories в CMake (убрать ../config.h)
+- [ ] реализовать push (git add/commit/push в ~/dotfiles)
+- [ ] реализовать update (сравнение системы и репо)
+- [ ] реализовать scan (поиск конфигов)
+- [ ] улучшить link: не ругаться, если dst — уже правильный симлинк
 - [ ] README
-- [ ] лицензия MIT
-- [ ] публичный dotpack
-- [ ] AUR-пакет
+- [ ] LICENSE MIT
+- [ ] cmake --install
+- [ ] public dotpack

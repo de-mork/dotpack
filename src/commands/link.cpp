@@ -1,5 +1,5 @@
 #include "link.h"
-#include "../config.h"
+#include "config.h"
 #include <cstdlib>
 #include <iostream>
 
