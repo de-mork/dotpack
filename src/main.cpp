@@ -1,4 +1,7 @@
 #include "commands/link.h"
+#include "commands/push.h"
+#include "commands/scan.h"
+#include "commands/update.h"
 #include <iostream>
 #include <string>
 
@@ -12,16 +15,13 @@ int main(int argc, char *argv[]) {
     std::string command = argv[1];
 
     if (command == "scan") {
-        std::cout << "TODO: scan\n";
-        return 0;
+        return run_scan();
     } else if (command == "link") {
         return run_link();
     } else if (command == "update") {
-        std::cout << "TODO: update\n";
-        return 0;
+        return run_update();
     } else if (command == "push") {
-        std::cout << "TODO: push\n";
-        return 0;
+        return run_push();
     } else {
         std::cerr << "unknown command: " << command << "\n";
         return 3;

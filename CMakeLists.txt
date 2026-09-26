@@ -6,9 +6,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(dotpack 
   src/main.cpp
-  src/commands/link.cpp
   src/config.cpp
   src/utils.cpp
+  src/commands/push.cpp
+  src/commands/link.cpp
+  src/commands/scan.cpp
+  src/commands/update.cpp
 )
 
 target_include_directories(dotpack PRIVATE src)
