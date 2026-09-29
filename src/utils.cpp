@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <cstdlib>
+#include <filesystem>
 
 std::string trim(const std::string &line) {
     bool first = true;
@@ -32,4 +33,28 @@ std::string expand_tilde(const std::string &line) {
     }
 
     return line;
+}
+
+std::filesystem::path home_dir() {
+    const char *home = std::getenv("HOME");
+    if (home == nullptr)
+        return std::filesystem::path();
+
+    return std::filesystem::path(home);
+}
+
+std::filesystem::path config_path() {
+    auto home = home_dir();
+    if (home.empty())
+        return {};
+
+    return home / ".config" / "dotpack" / "config";
+}
+
+std::filesystem::path dotfiles_dir() {
+    auto home = home_dir();
+    if (home.empty())
+        return {};
+
+    return home / "dotfiles";
 }

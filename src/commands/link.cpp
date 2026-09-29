@@ -1,6 +1,6 @@
 #include "link.h"
 #include "config.h"
-#include <cstdlib>
+#include "utils.h"
 #include <iostream>
 
 bool link_one(const std::filesystem::path &src,
@@ -26,21 +26,17 @@ bool link_one(const std::filesystem::path &src,
 }
 
 int run_link() {
-    const char *home = std::getenv("HOME");
-    if (home == nullptr) {
+    std::filesystem::path cfg = config_path();
+    if (cfg.empty()) {
         std::cerr << "error: HOME not set\n";
         return 1;
     }
 
-    std::filesystem::path config_path =
-        std::filesystem::path(home) / ".config" / "dotpack" / "config";
-
-    auto entries = read_config(config_path);
+    auto entries = read_config(cfg);
 
     int failures = 0;
     for (const auto &entry : entries) {
-        std::filesystem::path src =
-            std::filesystem::path(home) / "dotfiles" / entry.repo_name;
+        std::filesystem::path src = dotfiles_dir() / entry.repo_name;
         std::filesystem::path dst = entry.system_path;
 
         if (!link_one(src, dst))
