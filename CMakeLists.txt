@@ -12,7 +12,7 @@ add_executable(dotpack
   src/commands/push.cpp
   src/commands/link.cpp
   src/commands/scan.cpp
-  src/commands/update.cpp
+  src/commands/check.cpp
 )
 
 target_include_directories(dotpack PRIVATE src)
