@@ -11,7 +11,7 @@ bool link_one(const std::filesystem::path &src,
     }
 
     if (std::filesystem::exists(dst)) {
-        std::cerr << "error: destination already exists\n";
+        std::cerr << "error: destination already exists: " << dst << "\n";
         return false;
     }
 
@@ -36,7 +36,7 @@ int run_link() {
 
     int failures = 0;
     for (const auto &entry : entries) {
-        std::filesystem::path src = dotfiles_dir() / entry.repo_name;
+        std::filesystem::path src = entry.repo_path;
         std::filesystem::path dst = entry.system_path;
 
         if (!link_one(src, dst))

@@ -39,12 +39,12 @@
 
 ## Сделано
 - [x] config.cpp — парсер (read_config, Entry)
-- [x] utils.cpp - файл под полезные мини-функции (trim, expand_tilde) 
+- [x] utils.cpp - файл под полезные мини-функции (trim, expand_tilde, home_dir, config_path, dotfiles_dir) 
 - [x] link читает конфиг и создаёт симлинки
 - [x] dotfiles репо с 3 конфигами (zshrc, gitconfig, kitty)
+- [x] реализовать push (git add/commit/push в ~/dotfiles)
 
 ## Следующее
-- [ ] реализовать push (git add/commit/push в ~/dotfiles)
 - [ ] реализовать update (сравнение системы и репо)
 - [ ] реализовать scan (поиск конфигов)
 - [ ] улучшить link: не ругаться, если dst — уже правильный симлинк

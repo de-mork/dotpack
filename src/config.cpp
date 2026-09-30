@@ -9,7 +9,7 @@ std::vector<Entry> read_config(const std::filesystem::path &path) {
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "cannot open config " << path << "\n";
+        std::cerr << "error: cannot open config: " << path << "\n";
         return entries;
     }
 
@@ -20,16 +20,16 @@ std::vector<Entry> read_config(const std::filesystem::path &path) {
 
         auto pos = line.find("->");
         if (pos == std::string::npos) {
-            std::cerr << "Error: Incorrect line in config: " << line << "\n";
+            std::cerr << "error: invalid line in config: " << line << "\n";
             continue;
         }
 
-        std::string left = trim(expand_tilde(line.substr(0, pos)));
-        std::string right = trim(line.substr(pos + 2));
+        std::string left = expand_tilde(trim(line.substr(0, pos)));
+        std::string right = expand_tilde(trim(line.substr(pos + 2)));
 
         Entry e;
         e.system_path = left;
-        e.repo_name = right;
+        e.repo_path = right;
 
         entries.push_back(e);
     }
