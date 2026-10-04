@@ -97,10 +97,10 @@ run_collect():
 - [x] реализован push (git add/commit/push в ~/dotfiles)
 - [x] read_config разворачивает ~ в обеих частях
 - [x] run_link берёт пути из Entry
+- [x] убрать update, добавить заглушку check
+- [x] реализовать check (диагностика)
 
 # Следующее
-- [ ] убрать update, добавить заглушку check
-- [ ] реализовать check (диагностика)
 - [ ] улучшить link: already linked / wrong link
 - [ ] реализовать scan (scan_directories + run_scan)
 - [ ] реализовать collect
