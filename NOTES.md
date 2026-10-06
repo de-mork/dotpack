@@ -99,9 +99,10 @@ run_collect():
 - [x] run_link берёт пути из Entry
 - [x] убрать update, добавить заглушку check
 - [x] реализовать check (диагностика)
+- [x] улучшить link: already linked / wrong link
+- [x] link_one: создавать родительские папки dst через fs:create_directories
 
 # Следующее
-- [ ] улучшить link: already linked / wrong link
 - [ ] реализовать scan (scan_directories + run_scan)
 - [ ] реализовать collect
 - [ ] реализовать setup (мастер)

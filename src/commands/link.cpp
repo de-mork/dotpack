@@ -1,6 +1,8 @@
 #include "link.h"
 #include "config.h"
 #include "utils.h"
+#include <cstdio>
+#include <filesystem>
 #include <iostream>
 
 bool link_one(const std::filesystem::path &src,
@@ -9,20 +11,32 @@ bool link_one(const std::filesystem::path &src,
         std::cerr << "error: source not found: " << src << "\n";
         return false;
     }
-
-    if (std::filesystem::exists(dst)) {
+    LinkStatus status = get_link_status(src, dst);
+    switch (status) {
+    case LinkStatus::Ok:
+        std::cerr << "already linked: " << dst << "\n";
+        return true;
+    case LinkStatus::WrongLink:
+        std::cerr << "error: wrong link: " << dst << "\n";
+        return false;
+    case LinkStatus::Broken:
+        std::cerr << "error: broken symlink: " << dst << "\n";
+        return false;
+    case LinkStatus::RealFile:
         std::cerr << "error: destination already exists: " << dst << "\n";
         return false;
+    case LinkStatus::Missing:
+        try {
+            std::filesystem::create_directories(dst.parent_path());
+            std::filesystem::create_symlink(src, dst);
+            std::cout << "linked " << src << " -> " << dst << "\n";
+            return true;
+        } catch (const std::filesystem::filesystem_error &e) {
+            std::cerr << "error: " << e.what() << "\n";
+            return false;
+        }
     }
-
-    try {
-        std::filesystem::create_symlink(src, dst);
-        std::cout << "linked " << src << " -> " << dst << "\n";
-        return true;
-    } catch (const std::filesystem::filesystem_error &e) {
-        std::cerr << "error: " << e.what() << "\n";
-        return false;
-    }
+    return false;
 }
 
 int run_link() {

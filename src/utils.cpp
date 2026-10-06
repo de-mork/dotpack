@@ -58,3 +58,17 @@ std::filesystem::path dotfiles_dir() {
 
     return home / "dotfiles";
 }
+
+LinkStatus get_link_status(const std::filesystem::path &target,
+                           const std::filesystem::path &link) {
+    if (std::filesystem::is_symlink(link)) {
+        if (std::filesystem::read_symlink(link) == target)
+            return LinkStatus::Ok;
+        if (std::filesystem::exists(link))
+            return LinkStatus::WrongLink;
+        return LinkStatus::Broken;
+    }
+    if (std::filesystem::exists(link))
+        return LinkStatus::RealFile;
+    return LinkStatus::Missing;
+}

@@ -18,25 +18,27 @@ int run_check() {
         std::filesystem::path dst = entry.system_path;
         std::filesystem::path src = entry.repo_path;
 
-        if (std::filesystem::is_symlink(dst)) {
-            if (std::filesystem::read_symlink(dst) == src)
-                std::cout << "OK          " << dst << "\n";
-            else if (std::filesystem::exists(dst)) {
-                std::cout << "WRONG_LINK  " << dst << "\n";
-                problems++;
-            } else {
-                std::cout << "BROKEN      " << dst << "\n";
-                problems++;
-            }
-
-        } else {
-            if (std::filesystem::exists(dst)) {
-                std::cout << "REAL_FILE   " << dst << "\n";
-                problems++;
-            } else {
-                std::cout << "MISSING     " << dst << "\n";
-                problems++;
-            }
+        LinkStatus status = get_link_status(src, dst);
+        switch (status) {
+        case LinkStatus::Ok:
+            std::cout << "OK          " << dst << "\n";
+            break;
+        case LinkStatus::WrongLink:
+            std::cout << "WRONG_LINK  " << dst << "\n";
+            problems++;
+            break;
+        case LinkStatus::Broken:
+            std::cout << "BROKEN      " << dst << "\n";
+            problems++;
+            break;
+        case LinkStatus::RealFile:
+            std::cout << "REAL_FILE   " << dst << "\n";
+            problems++;
+            break;
+        case LinkStatus::Missing:
+            std::cout << "MISSING     " << dst << "\n";
+            problems++;
+            break;
         }
     }
     return problems == 0 ? 0 : 1;
