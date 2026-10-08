@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
     } else if (command == "check") {
         return run_check();
     } else if (command == "push") {
+        if (argc > 2)
+            return run_push(argv[2]);
         return run_push();
     } else {
         std::cerr << "unknown command: " << command << "\n";

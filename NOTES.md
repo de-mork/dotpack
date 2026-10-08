@@ -103,6 +103,7 @@ run_collect():
 - [x] link_one: создавать родительские папки dst через fs:create_directories
 
 # Следующее
+- [ ] push: не считать "nothing to commit" ошибкой (через git diff --cached --quiet)
 - [ ] реализовать scan (scan_directories + run_scan)
 - [ ] реализовать collect
 - [ ] реализовать setup (мастер)
