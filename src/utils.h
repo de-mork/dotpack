@@ -10,12 +10,15 @@ enum class LinkStatus {
     RealFile,  // реальный файл
 };
 
-LinkStatus get_link_status(const std::filesystem::path &src,
-                           const std::filesystem::path &dst);
-
 std::string trim(const std::string &line);
 std::string expand_tilde(const std::string &line);
 
 std::filesystem::path home_dir();
 std::filesystem::path config_path();
 std::filesystem::path dotfiles_dir();
+
+LinkStatus get_link_status(const std::filesystem::path &src,
+                           const std::filesystem::path &dst);
+
+bool is_config_candidate(const std::filesystem::path &path);
+bool should_skip(const std::filesystem::path &path);

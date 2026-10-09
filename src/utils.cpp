@@ -1,6 +1,48 @@
 #include "utils.h"
+#include <algorithm>
 #include <cstdlib>
 #include <filesystem>
+#include <string>
+#include <vector>
+
+static const std::vector<std::string> whitelist_ext{
+    ".conf", ".yaml", ".rasi", ".jsonc", ".toml", ".lua", ".json"};
+
+static const std::vector<std::string> whitelist_names{"config", "zshrc",
+                                                      "gitconfig", "bashrc"};
+
+static const std::vector<std::string> blacklist_ext{
+    ".log", ".tmp", ".pid", ".swp", ".swo", ".lock", ".bak", ".old", ".orig"};
+
+static const std::vector<std::string> blacklist_names{".local",
+                                                      ".cache",
+                                                      "void-packages",
+                                                      "zen",
+                                                      ".var",
+                                                      ".git",
+                                                      ".mozilla",
+                                                      "Applications",
+                                                      "Logs",
+                                                      "dotnet",
+                                                      ".dotnet",
+                                                      ".cargo",
+                                                      "build",
+                                                      "Projects",
+                                                      ".cmake",
+                                                      ".oh-my-zsh",
+                                                      "platform-tools",
+                                                      "AmneziaVPN",
+                                                      ".steam",
+                                                      "obs-studio",
+                                                      "libreoffice",
+                                                      "unity3d",
+                                                      "AmneziaVPN.ORG",
+                                                      "dotpack",
+                                                      "dotfiles",
+                                                      "lazy-lock.json",
+                                                      "lazyvim.json",
+                                                      "vesktop",
+                                                      "OpenTabletDriver"};
 
 std::string trim(const std::string &line) {
     bool first = true;
@@ -71,4 +113,33 @@ LinkStatus get_link_status(const std::filesystem::path &target,
     if (std::filesystem::exists(link))
         return LinkStatus::RealFile;
     return LinkStatus::Missing;
+}
+
+bool is_config_candidate(const std::filesystem::path &path) {
+    if (std::filesystem::is_directory(path))
+        return false;
+    std::string name = path.filename().string();
+    std::string ext = path.extension().string();
+
+    if (!name.empty() && name[0] == '.')
+        name = name.substr(1);
+
+    bool ext_match = std::find(whitelist_ext.begin(), whitelist_ext.end(),
+                               ext) != whitelist_ext.end();
+    bool name_match = std::find(whitelist_names.begin(), whitelist_names.end(),
+                                name) != whitelist_names.end();
+
+    return ext_match || name_match;
+}
+
+bool should_skip(const std::filesystem::path &path) {
+    std::string name = path.filename().string();
+    std::string ext = path.extension().string();
+
+    bool ext_match = std::find(blacklist_ext.begin(), blacklist_ext.end(),
+                               ext) != blacklist_ext.end();
+    bool name_match = std::find(blacklist_names.begin(), blacklist_names.end(),
+                                name) != blacklist_names.end();
+
+    return ext_match || name_match;
 }
