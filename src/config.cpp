@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 std::vector<Entry> read_config(const std::filesystem::path &path) {
     std::vector<Entry> entries;
@@ -34,4 +35,17 @@ std::vector<Entry> read_config(const std::filesystem::path &path) {
         entries.push_back(e);
     }
     return entries;
+}
+
+bool write_config(const std::filesystem::path &system_path,
+                  const std::filesystem::path &repo_path) {
+    std::ofstream file(config_path(), std::ios::app);
+
+    if (!file.is_open()) {
+        std::cerr << "error: cannot open config: " << config_path() << "\n";
+        return false;
+    }
+
+    file << to_tilde(system_path) << " -> " << to_tilde(repo_path) << "\n";
+    return true;
 }

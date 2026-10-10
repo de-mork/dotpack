@@ -1,4 +1,5 @@
 #include "commands/check.h"
+#include "commands/collect.h"
 #include "commands/link.h"
 #include "commands/push.h"
 #include "commands/scan.h"
@@ -24,6 +25,8 @@ int main(int argc, char *argv[]) {
         if (argc > 2)
             return run_push(argv[2]);
         return run_push();
+    } else if (command == "collect") {
+        return run_collect();
     } else {
         std::cerr << "unknown command: " << command << "\n";
         return 3;

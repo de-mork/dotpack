@@ -12,6 +12,7 @@ enum class LinkStatus {
 
 std::string trim(const std::string &line);
 std::string expand_tilde(const std::string &line);
+std::string to_tilde(const std::filesystem::path &path);
 
 std::filesystem::path home_dir();
 std::filesystem::path config_path();

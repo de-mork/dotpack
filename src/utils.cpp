@@ -77,6 +77,21 @@ std::string expand_tilde(const std::string &line) {
     return line;
 }
 
+std::string to_tilde(const std::filesystem::path &path) {
+    std::string p = path.string();
+    std::filesystem::path home = home_dir();
+
+    if (home.empty())
+        return p;
+
+    std::string home_str = home.string();
+
+    if (p.rfind(home_str, 0) == 0) {
+        return "~" + p.substr(home_str.size());
+    }
+    return p;
+}
+
 std::filesystem::path home_dir() {
     const char *home = std::getenv("HOME");
     if (home == nullptr)

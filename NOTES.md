@@ -102,10 +102,12 @@ run_collect():
 - [x] улучшить link: already linked / wrong link
 - [x] link_one: создавать родительские папки dst через fs:create_directories
 - [x] реализовать scan (scan_directories + run_scan)
+- [x] реализовать collect
 
 # Следующее
 - [ ] push: не считать "nothing to commit" ошибкой (через git diff --cached --quiet)
-- [ ] реализовать collect
+- [ ] write_config: не добавлять дубли
+- [ ] collect: пропускать уже залинкованные (get_link_status == Ok)
 - [ ] реализовать setup (мастер)
 - [ ] README
 - [ ] LICENSE MIT

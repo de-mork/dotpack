@@ -13,6 +13,7 @@ add_executable(dotpack
   src/commands/link.cpp
   src/commands/scan.cpp
   src/commands/check.cpp
+  src/commands/collect.cpp
 )
 
 target_include_directories(dotpack PRIVATE src)
