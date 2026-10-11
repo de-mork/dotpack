@@ -7,7 +7,7 @@
 #include <string>
 
 bool link_one(const std::filesystem::path &src,
-              const std::filesystem::path &dst, std::string flag) {
+              const std::filesystem::path &dst, bool force) {
     if (!std::filesystem::exists(src)) {
         std::cerr << "error: source not found: " << src << "\n";
         return false;
@@ -18,14 +18,38 @@ bool link_one(const std::filesystem::path &src,
         std::cerr << "already linked: " << dst << "\n";
         return true;
     case LinkStatus::WrongLink:
-        std::cerr << "error: wrong link: " << dst << "\n";
-        return false;
     case LinkStatus::Broken:
-        std::cerr << "error: broken symlink: " << dst << "\n";
-        return false;
     case LinkStatus::RealFile:
-        std::cerr << "error: destination already exists: " << dst << "\n";
-        return false;
+        if (!force) {
+            if (status == LinkStatus::WrongLink) {
+                std::cerr << "error: wrong link: " << dst << "\n";
+                return false;
+            } else if (status == LinkStatus::Broken) {
+                std::cerr << "error: broken symlink: " << dst << "\n";
+                return false;
+            } else {
+                std::cerr << "error: destination already exists: " << dst
+                          << "\n";
+                return false;
+            }
+        }
+
+        try {
+            if (std::filesystem::is_symlink(dst))
+                std::filesystem::remove(dst);
+            else {
+                std::filesystem::path backup = dst.string() + ".bak";
+                std::filesystem::rename(dst, backup);
+            }
+
+            std::filesystem::create_directories(dst.parent_path());
+            std::filesystem::create_symlink(src, dst);
+            std::cout << "linked(force) " << src << " -> " << dst << "\n";
+            return true;
+        } catch (const std::filesystem::filesystem_error &e) {
+            std::cerr << "error: " << e.what() << "\n";
+            return false;
+        }
     case LinkStatus::Missing:
         try {
             std::filesystem::create_directories(dst.parent_path());
@@ -46,6 +70,7 @@ int run_link(std::string flag) {
         std::cerr << "error: HOME not set\n";
         return 1;
     }
+    bool force = (flag == "--force");
 
     auto entries = read_config(cfg);
 
@@ -54,7 +79,7 @@ int run_link(std::string flag) {
         std::filesystem::path src = entry.repo_path;
         std::filesystem::path dst = entry.system_path;
 
-        if (!link_one(src, dst, flag))
+        if (!link_one(src, dst, force))
             failures++;
     }
 
