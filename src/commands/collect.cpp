@@ -24,16 +24,28 @@ std::filesystem::path compute_repo_path(const std::filesystem::path &path) {
     return dotfiles_dir() / p;
 }
 
-int run_collect() {
+int run_collect(std::string flag) {
     std::vector<ScanRoot> roots = {
         {home_dir() / ".config", true},
         {home_dir(), false},
     };
 
     auto candidates = scan_directories(roots);
+    auto entries = read_config(config_path());
 
     for (const std::filesystem::path &path : candidates) {
         std::filesystem::path repo_path = compute_repo_path(path);
+
+        bool already_in_config = false;
+        for (const auto &e : entries) {
+            if (e.system_path == path) {
+                already_in_config = true;
+                break;
+            }
+        }
+
+        if (already_in_config && flag != "--all")
+            continue;
 
         if (get_link_status(repo_path, path) == LinkStatus::Ok)
             continue;

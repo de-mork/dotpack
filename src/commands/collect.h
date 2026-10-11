@@ -2,4 +2,4 @@
 #include <filesystem>
 
 std::filesystem::path compute_repo_path(const std::filesystem::path &path);
-int run_collect();
+int run_collect(std::string flag = "");

@@ -26,6 +26,8 @@ int main(int argc, char *argv[]) {
             return run_push(argv[2]);
         return run_push();
     } else if (command == "collect") {
+        if (argc > 2)
+            return run_collect(argv[2]);
         return run_collect();
     } else {
         std::cerr << "unknown command: " << command << "\n";
