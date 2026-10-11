@@ -9,7 +9,8 @@
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         std::cerr << "usage: dotpack <command>\n";
-        std::cerr << "commands: link, check, push, scan, collect, setup\n";
+        std::cerr << "commands: scan, link (--force), check, collect (--all), "
+                     "push (--message)\n";
         return 2;
     }
 
