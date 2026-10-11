@@ -1,6 +1,7 @@
 #include "config.h"
 #include "utils.h"
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -37,15 +38,22 @@ std::vector<Entry> read_config(const std::filesystem::path &path) {
     return entries;
 }
 
-bool write_config(const std::filesystem::path &system_path,
-                  const std::filesystem::path &repo_path) {
+WriteStatus write_config(const std::filesystem::path &system_path,
+                         const std::filesystem::path &repo_path) {
+    auto entries = read_config(config_path());
+    for (const auto &e : entries) {
+        if (e.system_path == system_path)
+            return WriteStatus::AlreadyExists;
+    }
+
     std::ofstream file(config_path(), std::ios::app);
 
     if (!file.is_open()) {
         std::cerr << "error: cannot open config: " << config_path() << "\n";
-        return false;
+        return WriteStatus::Error;
     }
 
-    file << to_tilde(system_path) << " -> " << to_tilde(repo_path) << "\n";
-    return true;
+    file << std::left << std::setw(40) << to_tilde(system_path) << " -> "
+         << to_tilde(repo_path) << "\n";
+    return WriteStatus::Written;
 }

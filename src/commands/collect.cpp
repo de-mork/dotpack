@@ -33,13 +33,17 @@ int run_collect() {
     auto candidates = scan_directories(roots);
 
     for (const std::filesystem::path &path : candidates) {
+        std::filesystem::path repo_path = compute_repo_path(path);
+
+        if (get_link_status(repo_path, path) == LinkStatus::Ok)
+            continue;
+
         std::cout << path << ": add to dotfiles? [y/n] - ";
         std::string answer;
         std::getline(std::cin, answer);
+
         if (answer != "y" && answer != "Y")
             continue;
-
-        std::filesystem::path repo_path = compute_repo_path(path);
 
         try {
             std::filesystem::create_directories(repo_path.parent_path());
@@ -47,14 +51,19 @@ int run_collect() {
                 path, repo_path,
                 std::filesystem::copy_options::recursive |
                     std::filesystem::copy_options::overwrite_existing);
-            if (write_config(path, repo_path))
-                std::cout << "added: " << path << " -> " << repo_path << "\n";
-            else
-                std::cerr << "error: " << repo_path
-                          << ": not added to config\n";
+            switch (write_config(path, repo_path)) {
+            case WriteStatus::Written:
+                std::cout << "added: " << path << "\n";
+                break;
+            case WriteStatus::AlreadyExists:
+                std::cout << "already in config: " << path << "\n";
+                break;
+            case WriteStatus::Error:
+                std::cerr << "error: " << path << ": cannot write to config\n";
+                break;
+            }
         } catch (const std::filesystem::filesystem_error &e) {
             std::cerr << "error: " << e.what() << "\n";
-            continue;
         }
     }
     return 0;

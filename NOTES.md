@@ -105,6 +105,7 @@ run_collect():
 - [x] реализовать collect
 
 # Следующее
+- [ ] --force флаг для link
 - [ ] push: не считать "nothing to commit" ошибкой (через git diff --cached --quiet)
 - [ ] write_config: не добавлять дубли
 - [ ] collect: пропускать уже залинкованные (get_link_status == Ok)
