@@ -103,15 +103,15 @@ run_collect():
 - [x] link_one: создавать родительские папки dst через fs:create_directories
 - [x] реализовать scan (scan_directories + run_scan)
 - [x] реализовать collect
+- [x] write_config: не добавлять дубли
+- [x] collect: пропускать уже залинкованные
 
 # Следующее
 - [ ] --force флаг для link
 - [ ] push: не считать "nothing to commit" ошибкой (через git diff --cached --quiet)
-- [ ] write_config: не добавлять дубли
-- [ ] collect: пропускать уже залинкованные (get_link_status == Ok)
 - [ ] реализовать setup (мастер)
 - [ ] README
 - [ ] LICENSE MIT
 - [ ] cmake --install
-- [ ] XBPS/AUR пакет
+- [ ] XBPS пакет
 - [ ] public dotpack

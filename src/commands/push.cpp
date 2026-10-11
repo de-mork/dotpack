@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <iostream>
 #include <ostream>
+#include <string>
+#include <sys/wait.h>
 
 int run_push(std::string flag) {
     auto dotfiles = dotfiles_dir();
@@ -22,6 +24,8 @@ int run_push(std::string flag) {
     std::string add_command = "git -C " + dotfiles_path + " add .";
     std::string commit_text = "dotpack: auto-commit";
     std::string push_command = "git -C " + dotfiles_path + " push";
+    std::string diff_command =
+        "git -C " + dotfiles_path + " diff --cached --quiet";
 
     if (std::system(add_command.c_str()) != 0) {
         std::cerr << "error: git add failed\n";
@@ -35,6 +39,18 @@ int run_push(std::string flag) {
 
     std::string commit_command =
         "git -C " + dotfiles_path + " commit -m '" + commit_text + "'";
+
+    int raw = std::system(diff_command.c_str());
+    int result = WEXITSTATUS(raw);
+
+    if (result == 0) {
+        std::cout << "nothing to commit\n";
+        return 0;
+    }
+    if (result != 1) {
+        std::cerr << "error: git diff failed\n";
+        return 1;
+    }
 
     if (std::system(commit_command.c_str()) != 0) {
         std::cerr << "error: git commit failed\n";

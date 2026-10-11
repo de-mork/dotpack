@@ -18,6 +18,8 @@ int main(int argc, char *argv[]) {
     if (command == "scan") {
         return run_scan();
     } else if (command == "link") {
+        if (argc > 2)
+            return run_link(argv[2]);
         return run_link();
     } else if (command == "check") {
         return run_check();

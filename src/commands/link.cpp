@@ -4,9 +4,10 @@
 #include <cstdio>
 #include <filesystem>
 #include <iostream>
+#include <string>
 
 bool link_one(const std::filesystem::path &src,
-              const std::filesystem::path &dst) {
+              const std::filesystem::path &dst, std::string flag) {
     if (!std::filesystem::exists(src)) {
         std::cerr << "error: source not found: " << src << "\n";
         return false;
@@ -39,7 +40,7 @@ bool link_one(const std::filesystem::path &src,
     return false;
 }
 
-int run_link() {
+int run_link(std::string flag) {
     std::filesystem::path cfg = config_path();
     if (cfg.empty()) {
         std::cerr << "error: HOME not set\n";
@@ -53,7 +54,7 @@ int run_link() {
         std::filesystem::path src = entry.repo_path;
         std::filesystem::path dst = entry.system_path;
 
-        if (!link_one(src, dst))
+        if (!link_one(src, dst, flag))
             failures++;
     }
 

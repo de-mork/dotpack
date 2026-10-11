@@ -47,9 +47,6 @@ int run_collect(std::string flag) {
         if (already_in_config && flag != "--all")
             continue;
 
-        if (get_link_status(repo_path, path) == LinkStatus::Ok)
-            continue;
-
         std::cout << path << ": add to dotfiles? [y/n] - ";
         std::string answer;
         std::getline(std::cin, answer);
