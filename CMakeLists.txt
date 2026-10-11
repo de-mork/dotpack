@@ -17,4 +17,4 @@ add_executable(dotpack
 )
 
 target_include_directories(dotpack PRIVATE src)
-
+install(TARGETS dotpack RUNTIME DESTINATION bin)
